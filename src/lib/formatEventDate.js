@@ -1,16 +1,17 @@
 /**
- * Formats a date string into Indonesian format
+ * Formats an ISO date string and returns a localized Indonesian date string.
+ * Keeps support for 'full', 'short', and 'time' formats.
  * @param {string} isoString - The ISO date string to format
  * @param {('full'|'short'|'time')} [format='full'] - The format type to use
- * @returns {string} The formatted date string in Indonesian
- * 
- * @example
+ * @returns {string} The formatted date string (Indonesian localization)
+ *
+ * Examples:
  * // returns "Senin, 1 Januari 2024"
  * formatEventDate("2024-01-01T00:00:00.000Z", "full")
- * 
+ *
  * // returns "1 Januari 2024"
  * formatEventDate("2024-01-01T00:00:00.000Z", "short")
- * 
+ *
  * // returns "00:00"
  * formatEventDate("2024-01-01T00:00:00.000Z", "time")
  */

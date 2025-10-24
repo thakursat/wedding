@@ -40,7 +40,7 @@ export default function Gifts() {
                         transition={{ delay: 0.2 }}
                         className="inline-block text-rose-500 font-medium"
                     >
-                        Hadiah Pernikahan
+                        Wedding Gifts
                     </motion.span>
 
                     <motion.h2
@@ -49,7 +49,7 @@ export default function Gifts() {
                         transition={{ delay: 0.3 }}
                         className="text-4xl md:text-5xl font-serif text-gray-800"
                     >
-                        Berikan Hadiah
+                        Give a Gift
                     </motion.h2>
 
                     {/* Decorative Divider */}
@@ -71,23 +71,23 @@ export default function Gifts() {
                         transition={{ delay: 0.5 }}
                         className="space-y-4 max-w-md mx-auto"
                     >
-                        {/* Arabic InsyaAllah */}
+                        {/* Arabic phrase (kept in Arabic script) */}
                         <p className="font-arabic text-xl text-gray-800">
                             إن شاء الله
                         </p>
 
-                        {/* Main Message */}
+                        {/* Main Message translated to English */}
                         <p className="text-gray-600 leading-relaxed">
-                            Insya Allah, Kami Akan Menyalurkan Semua Hadiah yang Diberikan ke Beberapa Masjid dan Lembaga yang Membutuhkan
+                            God willing, we will distribute all gifts received to several mosques and organizations in need.
                         </p>
 
-                        {/* Arabic Dua */}
+                        {/* Arabic blessing and transliteration */}
                         <div className="space-y-2">
                             <p className="font-arabic text-lg text-gray-800">
                                 جزاكم الله خيرا وبارك الله فيكم
                             </p>
                             <p className="text-gray-600 italic text-sm">
-                                Jazakumullahu khairan, Barakallah fiikum
+                                Jazakumullahu khairan, Barakallahu fiikum (May God reward you and bless you)
                             </p>
                         </div>
                     </motion.div>

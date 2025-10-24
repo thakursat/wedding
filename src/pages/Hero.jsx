@@ -120,7 +120,7 @@ export default function Hero() {
                         className="inline-block mx-auto"
                     >
                         <span className="px-4 py-1 text-sm bg-rose-50 text-rose-600 rounded-full border border-rose-200">
-                            Catat Tanggal Penting Ini
+                            Save These Important Dates
                         </span>
                     </motion.div>
 
@@ -131,7 +131,7 @@ export default function Hero() {
                             transition={{ delay: 0.4 }}
                             className="text-gray-500 font-light italic text-base sm:text-lg"
                         >
-                            InsyaAllah Kami Akan Menikah
+                            God willing, we will get married
                         </motion.p>
                         <motion.h2
                             initial={{ scale: 0.8, opacity: 0 }}
@@ -196,13 +196,13 @@ export default function Hero() {
                                     className="space-y-2"
                                 >
                                     <p className="text-gray-500 font-serif italic text-sm">
-                                        Kepada Yth.
+                                        Dear
                                     </p>
                                     <p className="text-gray-600 font-medium text-sm">
-                                        Bapak/Ibu/Saudara/i
+                                        Ladies and Gentlemen
                                     </p>
                                     <p className="text-rose-500 font-semibold text-lg">
-                                        {guestName ? guestName : "Tamu"}
+                                        {guestName ? guestName : "Guest"}
                                     </p>
                                 </motion.div>
                             </div>

@@ -1,32 +1,32 @@
 const config = {
   data: {
     // Main invitation title that appears on the page
-    title: "Pernikahan Fulan & Fulana",
+    title: "Shanu and Ankit's Wedding",
     // Opening message/description of the invitation
     description:
-      "Kami akan menikah dan mengundang Anda untuk turut merayakan momen istimewa ini.", // Nanti ini dibikin random
+      "We are getting married and invite you to celebrate this special moment with us.",
     // Groom's name
-    groomName: "Fulan",
+    groomName: "Ankit",
     // Bride's name
-    brideName: "Fulana",
+    brideName: "Shanu",
     // Groom's parents names
-    parentGroom: "Bapak Groom & Ibu Groom",
+    parentGroom: "Groom's Father & Groom's Mother",
     // Bride's parents names
-    parentBride: "Bapak Bride & Ibu Bride",
+    parentBride: "Bride's Father & Bride's Mother",
     // Wedding date (format: YYYY-MM-DD)
-    date: "2024-12-24",
+    date: "2025-12-25",
     // Google Maps link for location (short clickable link)
     maps_url: "https://goo.gl/maps/abcdef",
     // Google Maps embed code to display map on website
     // How to get: open Google Maps → select location → Share → Embed → copy link
     maps_embed:
-      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.0000000000005!2d106.8270733147699!3d-6.175392995514422!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f4f1b6d7b1e7%3A0x2e69f4f1b6d7b1e7!2sMonumen%20Nasional!5e0!3m2!1sid!2sid!4v1633666820004!5m2!1sid!2sid",
+      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4317.8299229582!2d75.69805537615741!3d26.902222176653318!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396db4ab8c4abcdf%3A0x5d44d04dcfb87ec0!2sJaipur%20Bagh!5e1!3m2!1sen!2sin!4v1761332070033!5m2!1sen!2sin",
     // Event time (free format, example: "10:00 - 12:00 WIB")
-    time: "16:16 - 17:30 WIB",
+    time: "1 PM",
     // Venue/building name
-    location: "Grand Ballroom, Hotel Majesty",
+    location: "Jaipur Bagh, Jaipur",
     // Full address of the wedding venue
-    address: "Jl. Jend. Sudirman No.1, Jakarta",
+    address: "Jend. Sudirman St. No.1, Jakarta, Indonesia",
     // Image that appears when link is shared on social media
     ogImage: "/images/og-image.jpg",
     // Icon that appears in browser tab
@@ -35,7 +35,7 @@ const config = {
     agenda: [
       {
         // First event name
-        title: "Akad Nikah",
+        title: "Marriage Ceremony",
         // Event date (format: YYYY-MM-DD)
         date: "2024-12-24",
         // Start time (format: HH:MM)
@@ -49,7 +49,7 @@ const config = {
       },
       {
         // Second event name
-        title: "Resepsi Nikah",
+        title: "Wedding Reception",
         date: "2024-12-24",
         startTime: "16:16",
         endTime: "17:30",
@@ -62,7 +62,7 @@ const config = {
     // Background music settings
     audio: {
       // Music file (choose one or replace with your own file)
-      src: "/audio/fulfilling-humming.mp3", // or /audio/nature-sound.mp3
+      src: "/audio/song.mp3", // or /audio/nature-sound.mp3
       // Music title to display
       title: "Fulfilling Humming", // or Nature Sound
       // Whether music plays automatically when website opens
