@@ -337,31 +337,30 @@ export default function Hero() {
             </div>
 
             <div className="space-y-6 text-center">
-              <div className="space-y-3">
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.9 }}
-                  className="flex items-center justify-center space-x-2"
-                >
-                  <Calendar className="w-4 h-4 text-rose-400" />
-                  <span className="text-sm font-medium text-gray-700 sm:text-base">
-                    {formatEventDate(config.data.date, "full")}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.9 }}
+                className="flex justify-center"
+              >
+                <div className="inline-flex flex-wrap items-center justify-center gap-3 rounded-full border border-rose-100/70 bg-white/90 px-5 py-2 shadow-sm shadow-rose-100/70">
+                  <span className="inline-flex items-center gap-2 text-sm font-medium text-gray-700 sm:text-base">
+                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-rose-50 text-rose-500 shadow-sm">
+                      <Calendar className="h-4 w-4" />
+                    </span>
+                    <span>
+                      {formatEventDate(config.data.date, "dayMonthYear")}
+                    </span>
                   </span>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 1 }}
-                  className="flex items-center justify-center space-x-2"
-                >
-                  <Clock className="w-4 h-4 text-rose-400" />
-                  <span className="text-sm font-medium text-gray-700 sm:text-base">
-                    {config.data.time}
+                  <span className="hidden h-4 w-px bg-rose-100 sm:block" />
+                  <span className="inline-flex items-center gap-2 text-sm font-medium text-gray-700 sm:text-base">
+                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-rose-50 text-rose-500 shadow-sm">
+                      <Clock className="h-4 w-4" />
+                    </span>
+                    <span>{config.data.time}</span>
                   </span>
-                </motion.div>
-              </div>
+                </div>
+              </motion.div>
 
               <div className="flex items-center justify-center gap-3">
                 <div className="w-8 h-px bg-rose-200/50 sm:w-12" />

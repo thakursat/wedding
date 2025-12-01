@@ -14,7 +14,7 @@ const config = {
     // Bride's parents names
     parentBride: "Bride's Father & Bride's Mother",
     // Wedding date (format: YYYY-MM-DD)
-    date: "2024-12-25",
+    date: "2025-12-25",
     // Google Maps link for location (short clickable link)
     maps_url: "https://maps.app.goo.gl/3agAD1nXwfr1t7R28",
     // Google Maps embed code to display map on website
@@ -31,8 +31,8 @@ const config = {
     location: "Jaipur Bagh, Jaipur",
     // Full address of the wedding venue
     address: "Jaipur Bagh, Sirsi Road, Jaipur, Rajasthan, India",
-    receptionLocation: "Moon and Mars, Chakheri",
-    receptionAddress: "Moon and Mars, Chakheri, Uttar Pradesh, India",
+    receptionLocation: "Moon and Mars, Kanpur",
+    receptionAddress: "Moon and Mars, Rooma, Kanpur, Uttar Pradesh",
     // Image that appears when link is shared on social media
     ogImage: "/images/og-image.jpg",
     // Icon that appears in browser tab
@@ -41,9 +41,9 @@ const config = {
     agenda: [
         {
           slug: "haldi",
-          title: "Haldi & Welcome Lunch",
+          title: "Haldi ",
           subheading: "Turmeric blessings, floral rituals, and folk songs",
-          date: "2024-12-24",
+          date: "2025-12-24",
           startTime: "11:00 AM",
           endTime: "02:00 PM",
           timeZone: "Asia/Kolkata",
@@ -82,7 +82,7 @@ const config = {
           slug: "sangeet",
           title: "Ring Ceremony & Sangeet",
           subheading: "Dance-offs, choreographed surprises, and live dhol",
-          date: "2024-12-24",
+          date: "2025-12-24",
           startTime: "05:00 PM",
           endTime: "08:00 PM",
           timeZone: "Asia/Kolkata",
@@ -121,7 +121,7 @@ const config = {
           slug: "wedding",
           title: "Wedding Ceremony",
           subheading: "Sacred pheras, varmala, and vows",
-          date: "2024-12-25",
+          date: "2025-12-25",
           startTime: "01:00 PM",
           endTime: "04:00 PM",
           timeZone: "Asia/Kolkata",
@@ -161,7 +161,7 @@ const config = {
           slug: "reception",
           title: "Reception Gala",
           subheading: "Elegant sit-down dinner and toasts",
-          date: "2024-12-30",
+          date: "2025-12-30",
           startTime: "01:00 PM",
           endTime: "06:00 PM",
           timeZone: "Asia/Kolkata",

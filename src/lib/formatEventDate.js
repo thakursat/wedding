@@ -12,30 +12,51 @@ export const formatEventDate = (isoString, format = 'full') => {
         return '';
     }
 
-    const formats = {
+    const formatConfigs = {
         full: {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            timeZone: 'Asia/Kolkata'
+            options: {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                timeZone: 'Asia/Kolkata'
+            },
+            locale: 'en-US'
         },
         short: {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric',
-            timeZone: 'Asia/Kolkata'
+            options: {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+                timeZone: 'Asia/Kolkata'
+            },
+            locale: 'en-US'
         },
         time: {
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: true,
-            timeZone: 'Asia/Kolkata'
+            options: {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true,
+                timeZone: 'Asia/Kolkata'
+            },
+            locale: 'en-US'
+        },
+        dayMonthYear: {
+            options: {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+                timeZone: 'Asia/Kolkata'
+            },
+            locale: 'en-GB'
         }
     };
 
-    const options = formats[format] ?? formats.full;
-    const formatter = new Intl.DateTimeFormat('en-US', options);
+    const activeFormat = formatConfigs[format] ?? formatConfigs.full;
+    const hasOptionsObject = typeof activeFormat.options === 'object';
+    const options = hasOptionsObject ? activeFormat.options : activeFormat;
+    const locale = hasOptionsObject ? activeFormat.locale ?? 'en-US' : 'en-US';
+    const formatter = new Intl.DateTimeFormat(locale, options);
 
     return formatter.format(date);
 };
