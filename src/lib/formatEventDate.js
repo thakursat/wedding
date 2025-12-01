@@ -1,22 +1,16 @@
 /**
- * Formats an ISO date string and returns a localized Indonesian date string.
- * Keeps support for 'full', 'short', and 'time' formats.
+ * Formats an ISO date string and returns an English date string.
+ * Supports 'full', 'short', and 'time' formats for reuse across the UI.
  * @param {string} isoString - The ISO date string to format
  * @param {('full'|'short'|'time')} [format='full'] - The format type to use
- * @returns {string} The formatted date string (Indonesian localization)
- *
- * Examples:
- * // returns "Senin, 1 Januari 2024"
- * formatEventDate("2024-01-01T00:00:00.000Z", "full")
- *
- * // returns "1 Januari 2024"
- * formatEventDate("2024-01-01T00:00:00.000Z", "short")
- *
- * // returns "00:00"
- * formatEventDate("2024-01-01T00:00:00.000Z", "time")
+ * @returns {string} The formatted date string (English localization)
  */
 export const formatEventDate = (isoString, format = 'full') => {
     const date = new Date(isoString);
+
+    if (Number.isNaN(date.getTime())) {
+        return '';
+    }
 
     const formats = {
         full: {
@@ -24,73 +18,24 @@ export const formatEventDate = (isoString, format = 'full') => {
             year: 'numeric',
             month: 'long',
             day: 'numeric',
-            timeZone: 'Asia/Jakarta'
+            timeZone: 'Asia/Kolkata'
         },
         short: {
             day: 'numeric',
             month: 'long',
             year: 'numeric',
-            timeZone: 'Asia/Jakarta'
+            timeZone: 'Asia/Kolkata'
         },
         time: {
             hour: '2-digit',
             minute: '2-digit',
-            hour12: false,
-            timeZone: 'Asia/Jakarta'
+            hour12: true,
+            timeZone: 'Asia/Kolkata'
         }
     };
 
-    // Indonesian month names mapping
-    const monthsIndonesian = {
-        'January': 'Januari',
-        'February': 'Februari',
-        'March': 'Maret',
-        'April': 'April',
-        'May': 'Mei',
-        'June': 'Juni',
-        'July': 'Juli',
-        'August': 'Agustus',
-        'September': 'September',
-        'October': 'Oktober',
-        'November': 'November',
-        'December': 'Desember'
-    };
+    const options = formats[format] ?? formats.full;
+    const formatter = new Intl.DateTimeFormat('en-US', options);
 
-    // Indonesian day names mapping
-    const daysIndonesian = {
-        'Sunday': 'Minggu',
-        'Monday': 'Senin',
-        'Tuesday': 'Selasa',
-        'Wednesday': 'Rabu',
-        'Thursday': 'Kamis',
-        'Friday': 'Jumat',
-        'Saturday': 'Sabtu'
-    };
-
-    let formatted = date.toLocaleDateString('en-US', formats[format]);
-
-    // Handle time format separately
-    if (format === 'time') {
-        return date.toLocaleTimeString('en-US', formats[format]);
-    }
-
-    // Replace English month and day names with Indonesian ones
-    Object.keys(monthsIndonesian).forEach(english => {
-        formatted = formatted.replace(english, monthsIndonesian[english]);
-    });
-
-    Object.keys(daysIndonesian).forEach(english => {
-        formatted = formatted.replace(english, daysIndonesian[english]);
-    });
-
-    // Format adjustment for full date
-    if (format === 'full') {
-        // Convert "Hari, Tanggal Bulan Tahun" format
-        const parts = formatted.split(', ');
-        if (parts.length === 2) {
-            formatted = `${parts[0]}, ${parts[1]}`;
-        }
-    }
-
-    return formatted;
+    return formatter.format(date);
 };

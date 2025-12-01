@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024-present mrofisr
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,13 +15,14 @@
  */
 
 // src/App.jsx
-import { useState } from 'react';
-import { AnimatePresence } from 'framer-motion';
-import Layout from '@/components/Layout';
-import MainContent from '@/pages/MainContent';
-import LandingPage from '@/pages/LandingPage';
-import { Helmet, HelmetProvider } from 'react-helmet-async';
-import config from '@/config/config';
+import { useState } from "react";
+import { AnimatePresence } from "framer-motion";
+import { Helmet, HelmetProvider } from "react-helmet-async";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import Layout from "@/components/Layout";
+import MainContent from "@/pages/MainContent";
+import LandingPage from "@/pages/LandingPage";
+import config from "@/config/config";
 
 /**
  * App component serves as the root of the application.
@@ -43,6 +44,8 @@ import config from '@/config/config';
  */
 function App() {
   const [isInvitationOpen, setIsInvitationOpen] = useState(false);
+  const location = useLocation();
+
   return (
     <HelmetProvider>
       <Helmet>
@@ -50,35 +53,37 @@ function App() {
         <title>{config.data.title}</title>
         <meta name="title" content={config.data.title} />
         <meta name="description" content={config.data.description} />
-
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content={window.location.href} />
         <meta property="og:title" content={config.data.title} />
         <meta property="og:description" content={config.data.description} />
         <meta property="og:image" content={config.data.ogImage} />
-
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content={window.location.href} />
         <meta property="twitter:title" content={config.data.title} />
-        <meta property="twitter:description" content={config.data.description} />
+        <meta
+          property="twitter:description"
+          content={config.data.description}
+        />
         <meta property="twitter:image" content={config.data.ogImage} />
-
         {/* Favicon */}
         <link rel="icon" type="image/x-icon" href={config.data.favicon} />
-
         {/* Additional Meta Tags */}
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="theme-color" content="#FDA4AF" /> {/* Rose-300 color */}
       </Helmet>
 
-      <AnimatePresence mode='wait'>
+      <AnimatePresence mode="wait">
         {!isInvitationOpen ? (
           <LandingPage onOpenInvitation={() => setIsInvitationOpen(true)} />
         ) : (
           <Layout>
-            <MainContent />
+            <Routes location={location} key={location.pathname}>
+              <Route path="/" element={<MainContent />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
           </Layout>
         )}
       </AnimatePresence>

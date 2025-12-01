@@ -1,21 +1,13 @@
 // src/components/bottom-bar/BottomBar.jsx
-import React, { useEffect, useCallback } from 'react';
-import { motion } from 'framer-motion';
-import {
-  Home,
-  CalendarHeart,
-  MapPin,
-  Gift,
-  MessageCircleHeart
-} from 'lucide-react';
+import React, { useEffect, useCallback } from "react";
+import { motion } from "framer-motion";
+import { Home, CalendarHeart, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const menuItems = [
-  { icon: Home, label: 'Home', href: '#home', id: 'home' },
-  { icon: CalendarHeart, label: 'Events', href: '#event', id: 'event' },
-  { icon: MapPin, label: 'Location', href: '#location', id: 'location' },
-  { icon: Gift, label: 'Gifts', href: '#gifts', id: 'gifts' },
-  { icon: MessageCircleHeart, label: 'Wishes', href: '#wishes', id: 'wishes' },
+  { icon: Home, label: "Home", href: "#home", id: "home" },
+  { icon: CalendarHeart, label: "Events", href: "#event", id: "event" },
+  { icon: MapPin, label: "Location", href: "#location", id: "location" },
 ];
 
 /**
@@ -35,7 +27,7 @@ const menuItems = [
  * @returns {JSX.Element} A JSX element containing the animated bottom navigation bar with auto-detection.
  */
 const BottomBar = () => {
-  const [active, setActive] = React.useState('home');
+  const [active, setActive] = React.useState("home");
 
   // Function to handle smooth scrolling when clicking menu items
   const handleMenuClick = useCallback((e, href, id) => {
@@ -44,11 +36,11 @@ const BottomBar = () => {
     if (element) {
       // Temporarily set active state for immediate feedback
       setActive(id);
-      
+
       // Smooth scroll to element
       element.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
+        behavior: "smooth",
+        block: "start",
       });
     }
   }, []);
@@ -57,17 +49,17 @@ const BottomBar = () => {
   useEffect(() => {
     const observerOptions = {
       root: null, // Use viewport as root
-      rootMargin: '-20% 0px -80% 0px', // Trigger when section is 20% visible from top
-      threshold: 0
+      rootMargin: "-20% 0px -80% 0px", // Trigger when section is 20% visible from top
+      threshold: 0,
     };
 
     const observerCallback = (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           const sectionId = entry.target.id;
-          
+
           // Only update if it's a valid menu section
-          const validSection = menuItems.find(item => item.id === sectionId);
+          const validSection = menuItems.find((item) => item.id === sectionId);
           if (validSection) {
             setActive(sectionId);
           }
@@ -75,7 +67,10 @@ const BottomBar = () => {
       });
     };
 
-    const observer = new IntersectionObserver(observerCallback, observerOptions);
+    const observer = new IntersectionObserver(
+      observerCallback,
+      observerOptions
+    );
 
     // Observe all sections that correspond to menu items
     menuItems.forEach((item) => {
@@ -99,57 +94,57 @@ const BottomBar = () => {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, type: "spring", stiffness: 100 }}
       >
-      <div className="backdrop-blur-md bg-white/90 border border-gray-200/80 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.07)] px-3 py-2">
-        <nav className="flex items-center gap-1">
-          {menuItems.map((item) => (
-            <motion.a
-              key={item.label}
-              href={item.href}
-              className={cn(
-                "flex flex-col items-center justify-center py-2 px-2 rounded-xl transition-all duration-300 ease-in-out",
-                "hover:bg-gray-50/80 cursor-pointer min-w-[60px]",
-                active === item.id
-                  ? "text-primary bg-primary/5"
-                  : "text-gray-600"
-              )}
-              whileHover={{ y: -2 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={(e) => handleMenuClick(e, item.href, item.id)}
-            >
-              <motion.div
-                animate={{
-                  scale: active === item.id ? 1.1 : 1,
-                }}
-                transition={{ duration: 0.2 }}
-              >
-                <item.icon
-                  className={cn(
-                    "h-[18px] w-[18px] sm:h-5 sm:w-5 mb-0.5 sm:mb-1 transition-all duration-300",
-                    active === item.id
-                      ? "stroke-rose-500 stroke-[2.5px]"
-                      : "stroke-gray-600 stroke-2"
-                  )}
-                />
-              </motion.div>
-              <motion.span 
+        <div className="backdrop-blur-md bg-white/90 border border-gray-200/80 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.07)] px-3 py-2">
+          <nav className="flex items-center gap-1">
+            {menuItems.map((item) => (
+              <motion.a
+                key={item.label}
+                href={item.href}
                 className={cn(
-                  "text-[10px] sm:text-xs font-medium transition-all duration-300 line-clamp-1",
+                  "flex flex-col items-center justify-center py-2 px-2 rounded-xl transition-all duration-300 ease-in-out",
+                  "hover:bg-gray-50/80 cursor-pointer min-w-[60px]",
                   active === item.id
-                    ? "text-rose-500 font-semibold"
+                    ? "text-primary bg-primary/5"
                     : "text-gray-600"
                 )}
-                animate={{
-                  scale: active === item.id ? 1.05 : 1,
-                }}
-                transition={{ duration: 0.2 }}
+                whileHover={{ y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={(e) => handleMenuClick(e, item.href, item.id)}
               >
-                {item.label}
-              </motion.span>
-            </motion.a>
-          ))}
-        </nav>
-      </div>
-    </motion.div>
+                <motion.div
+                  animate={{
+                    scale: active === item.id ? 1.1 : 1,
+                  }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <item.icon
+                    className={cn(
+                      "h-[18px] w-[18px] sm:h-5 sm:w-5 mb-0.5 sm:mb-1 transition-all duration-300",
+                      active === item.id
+                        ? "stroke-rose-500 stroke-[2.5px]"
+                        : "stroke-gray-600 stroke-2"
+                    )}
+                  />
+                </motion.div>
+                <motion.span
+                  className={cn(
+                    "text-[10px] sm:text-xs font-medium transition-all duration-300 line-clamp-1",
+                    active === item.id
+                      ? "text-rose-500 font-semibold"
+                      : "text-gray-600"
+                  )}
+                  animate={{
+                    scale: active === item.id ? 1.05 : 1,
+                  }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {item.label}
+                </motion.span>
+              </motion.a>
+            ))}
+          </nav>
+        </div>
+      </motion.div>
     </div>
   );
 };
