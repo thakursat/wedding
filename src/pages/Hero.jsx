@@ -280,8 +280,66 @@ export default function Hero() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="relative z-10 space-y-6"
+        className="relative z-10 space-y-12"
       >
+        <motion.div
+          initial={{ opacity: 0, y: 40, scale: 0.96 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 1, ease: "easeOut" }}
+          className="relative mx-auto w-full max-w-xl sm:max-w-2xl"
+        >
+          <div className="pointer-events-none absolute inset-0 -z-10 rounded-[2.75rem] bg-gradient-to-br from-rose-200/60 via-white/30 to-rose-50/40 blur-3xl" />
+          <motion.div
+            animate={{ y: [0, -16, 0] }}
+            transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+            className="relative overflow-hidden rounded-[2.5rem] border border-white/40 bg-white/60 shadow-[0_25px_60px_-20px_rgba(244,114,182,0.45)] backdrop-blur-md"
+          >
+            <motion.img
+              src="/images/couple.jpeg"
+              alt={`${config.data.brideName} and ${config.data.groomName}`}
+              className="h-full w-full object-cover"
+              initial={{ scale: 1.08, opacity: 0.95 }}
+              animate={{ scale: [1.08, 1, 1.08], opacity: 1 }}
+              transition={{
+                duration: 10,
+                repeat: Infinity,
+                ease: "easeInOut",
+                repeatType: "mirror",
+              }}
+              loading="eager"
+            />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 via-black/10 to-transparent" />
+            <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-end gap-2 px-6 pb-10 text-center text-white sm:pb-14">
+              <motion.span
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5, duration: 0.6 }}
+                className="text-xs uppercase tracking-[0.45em] text-white/80 sm:text-sm"
+              >
+                Our Story Begins
+              </motion.span>
+              <motion.h1
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.7, duration: 0.7 }}
+                className="text-3xl font-serif sm:text-[2.85rem]"
+              >
+                {config.data.brideName} &amp; {config.data.groomName}
+              </motion.h1>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.9, duration: 0.7 }}
+                className="text-sm font-light text-white/80 sm:text-base"
+              >
+                {formatEventDate(config.data.date, "dayMonthYear")} at{" "}
+                {config.data.time}
+              </motion.p>
+            </div>
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-white via-white/40 to-transparent" />
+          </motion.div>
+        </motion.div>
+
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
@@ -302,14 +360,7 @@ export default function Hero() {
           >
             God willing, we unite in a celebration of love, tradition, and joy.
           </motion.p>
-          <motion.h2
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.6 }}
-            className="text-[2.5rem] font-serif text-transparent bg-gradient-to-r from-rose-600 to-pink-600 bg-clip-text sm:text-[3.75rem] md:text-[4.25rem]"
-          >
-            {config.data.brideName} & {config.data.groomName}
-          </motion.h2>
+
           <div className="flex flex-wrap items-center justify-center gap-2 pt-5">
             {celebrationBadges.map((badge) => (
               <span
@@ -394,7 +445,6 @@ export default function Hero() {
           <div className="absolute -top-2 -right-2 w-16 h-16 bg-rose-100/20 rounded-full blur-xl sm:h-24 sm:w-24" />
           <div className="absolute -bottom-2 -left-2 w-16 h-16 bg-rose-100/20 rounded-full blur-xl sm:h-24 sm:w-24" />
         </motion.div>
-
         <CountdownTimer
           targetDate={countdownTarget?.iso}
           targetLabel={countdownTarget?.label}
