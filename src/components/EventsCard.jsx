@@ -12,7 +12,9 @@ import {
   Calendar as CalendarIcon,
   Flower2,
 } from "lucide-react";
+import translations from "@/config/translations";
 import { formatEventDate } from "@/lib/formatEventDate";
+import { useLanguage } from "@/lib/language";
 
 const Modal = ({ isOpen, onClose, children }) => {
   return (
@@ -62,11 +64,12 @@ const CalendarButton = ({ icon: Icon, label, onClick, className = "" }) => (
  * @param {Object} props - Component props.
  * @param {Object} props.eventData - Object containing event data.
  * @param {string} props.eventData.date - The date of the event (expected format: YYYY-MM-DD).
- * @param {string} props.eventData.startTime - The start time of the event (expected format: HH:mm).
- * @param {string} props.eventData.endTime - The end time of the event (expected format: HH:mm).
- * @param {string} props.eventData.title - The title of the event.
- * @param {string} props.eventData.description - A description of the event.
- * @param {string} props.eventData.location - The location where the event takes place.
+ * @param {string} [props.eventData.startTime] - The start time of the event (expected format: HH:mm). Omit for an all-day event.
+ * @param {string} [props.eventData.endTime] - The end time of the event (expected format: HH:mm). Omit for an all-day event.
+ * @param {{en: string, hi: string}} props.eventData.title - The title of the event.
+ * @param {{en: string, hi: string}} props.eventData.description - A description of the event.
+ * @param {{en: string, hi: string}} [props.eventData.location] - The location where the event takes place.
+ * @param {{en: string, hi: string}} [props.eventData.verse] - The invitation couplet shown on the card.
  * @param {string} props.eventData.timeZone - The time zone of the event.
  *
  * @example
@@ -74,9 +77,9 @@ const CalendarButton = ({ icon: Icon, label, onClick, className = "" }) => (
  *   date: '2023-10-15',
  *   startTime: '14:00',
  *   endTime: '16:00',
- *   title: 'Wedding Ceremony - Reception',
- *   description: 'Join us to celebrate the wedding ceremony and reception.',
- *   location: 'Sunset Gardens',
+ *   title: { en: 'Wedding Ceremony', hi: 'शुभ विवाह' },
+ *   description: { en: 'Join us to celebrate.', hi: 'पधारकर आशीर्वाद दें।' },
+ *   location: { en: 'Sunset Gardens', hi: 'सनसेट गार्डन्स' },
  *   timeZone: 'Asia/Kolkata'
  * };
  *
@@ -86,35 +89,64 @@ const CalendarButton = ({ icon: Icon, label, onClick, className = "" }) => (
  */
 const SingleEventCard = ({ eventData }) => {
   const [showCalendarModal, setShowCalendarModal] = useState(false);
+  const { language, t } = useLanguage();
+  const title = t(eventData.title);
+  const description = t(eventData.description);
+  const location = t(eventData.location);
+  const isAllDay = !eventData.startTime || !eventData.endTime;
+
+  // All-day events use the date only; calendars expect the end date to be the following day.
+  const allDayRange = () => {
+    const start = eventData.date.replace(/-/g, "");
+    const next = new Date(`${eventData.date}T00:00:00Z`);
+    next.setUTCDate(next.getUTCDate() + 1);
+    const end = next.toISOString().slice(0, 10).replace(/-/g, "");
+    return { start, end };
+  };
 
   const googleCalendarLink = () => {
-    const startDate = new Date(`${eventData.date}T${eventData.startTime}:00`);
-    const endDate = new Date(`${eventData.date}T${eventData.endTime}:00`);
+    let dates;
+    if (isAllDay) {
+      const { start, end } = allDayRange();
+      dates = `${start}/${end}`;
+    } else {
+      const startDate = new Date(`${eventData.date}T${eventData.startTime}:00`);
+      const endDate = new Date(`${eventData.date}T${eventData.endTime}:00`);
 
-    const formatDate = (date) => {
-      return date.toISOString().replace(/-|:|\.\d+/g, "");
-    };
+      const formatDate = (date) => {
+        return date.toISOString().replace(/-|:|\.\d+/g, "");
+      };
+      dates = `${formatDate(startDate)}/${formatDate(endDate)}`;
+    }
 
-    return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(eventData.title)}&dates=${formatDate(startDate)}/${formatDate(endDate)}&details=${encodeURIComponent(eventData.description)}&location=${encodeURIComponent(eventData.location)}&ctz=${eventData.timeZone}`;
+    return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${dates}&details=${encodeURIComponent(description)}&location=${encodeURIComponent(location)}&ctz=${eventData.timeZone}`;
   };
 
   const generateICSContent = () => {
-    const startDate = new Date(`${eventData.date}T${eventData.startTime}:00`);
-    const endDate = new Date(`${eventData.date}T${eventData.endTime}:00`);
+    let timing;
+    if (isAllDay) {
+      const { start, end } = allDayRange();
+      timing = `DTSTART;VALUE=DATE:${start}
+DTEND;VALUE=DATE:${end}`;
+    } else {
+      const startDate = new Date(`${eventData.date}T${eventData.startTime}:00`);
+      const endDate = new Date(`${eventData.date}T${eventData.endTime}:00`);
 
-    const formatICSDate = (date) => {
-      return date.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
-    };
+      const formatICSDate = (date) => {
+        return date.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+      };
+      timing = `DTSTART:${formatICSDate(startDate)}
+DTEND:${formatICSDate(endDate)}`;
+    }
 
     return `BEGIN:VCALENDAR
 VERSION:2.0
 BEGIN:VEVENT
 URL:${window.location.href}
-DTSTART:${formatICSDate(startDate)}
-DTEND:${formatICSDate(endDate)}
-SUMMARY:${eventData.title}
-DESCRIPTION:${eventData.description}
-LOCATION:${eventData.location}
+${timing}
+SUMMARY:${title}
+DESCRIPTION:${description}
+LOCATION:${location}
 END:VEVENT
 END:VCALENDAR`;
   };
@@ -126,7 +158,7 @@ END:VCALENDAR`;
     });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = `${eventData.title.toLowerCase().replace(/ /g, "-")}.ics`;
+    link.download = `${eventData.slug}.ics`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -146,7 +178,7 @@ END:VCALENDAR`;
           <div className="h-48 w-full overflow-hidden">
             <img
               src={heroImage}
-              alt={eventData.title}
+              alt={title}
               className="h-full w-full object-cover"
             />
           </div>
@@ -155,13 +187,13 @@ END:VCALENDAR`;
           <div className="flex items-start justify-between gap-4">
             <div className="space-y-1">
               <p className="text-xs uppercase tracking-[0.3em] text-rose-400">
-                {eventData.themeTag}
+                {t(eventData.themeTag)}
               </p>
-              <h3 className="text-xl font-semibold text-gray-800">
-                {eventData.title.split(" - ")[0]}
-              </h3>
+              <h3 className="text-xl font-semibold text-gray-800">{title}</h3>
               {eventData.subheading && (
-                <p className="text-sm text-gray-500">{eventData.subheading}</p>
+                <p className="text-sm text-gray-500">
+                  {t(eventData.subheading)}
+                </p>
               )}
             </div>
             <motion.button
@@ -169,30 +201,40 @@ END:VCALENDAR`;
               whileTap={{ scale: 0.95 }}
               className="text-rose-500 transition-colors hover:text-rose-600"
               onClick={() => setShowCalendarModal(true)}
+              aria-label={t(translations.events.addToCalendar)}
             >
               <CalendarPlus className="w-5 h-5" />
             </motion.button>
           </div>
+          {eventData.verse && (
+            <p className="whitespace-pre-line rounded-xl bg-amber-50/70 px-4 py-3 text-center text-sm italic leading-relaxed text-gray-700">
+              {t(eventData.verse)}
+            </p>
+          )}
           <div className="space-y-3 text-gray-600">
             <div className="flex items-center space-x-3">
               <Calendar className="w-5 h-5 text-rose-500" />
-              <span>{formatEventDate(eventData.date)}</span>
+              <span>{formatEventDate(eventData.date, "full", language)}</span>
             </div>
-            <div className="flex items-center space-x-3">
-              <Clock className="w-5 h-5 text-rose-500" />
-              <span>
-                {eventData.startTime} - {eventData.endTime} local time
-              </span>
-            </div>
-            <div className="flex items-center space-x-3">
-              <MapPin className="w-5 h-5 text-rose-500" />
-              <span>{eventData.location}</span>
-            </div>
+            {!isAllDay && (
+              <div className="flex items-center space-x-3">
+                <Clock className="w-5 h-5 text-rose-500" />
+                <span>
+                  {eventData.startTime} - {eventData.endTime}
+                </span>
+              </div>
+            )}
+            {location && (
+              <div className="flex items-center space-x-3">
+                <MapPin className="w-5 h-5 text-rose-500" />
+                <span>{location}</span>
+              </div>
+            )}
           </div>
           <div className="flex items-center justify-between border-t border-rose-100 pt-4">
             <span className="inline-flex items-center gap-2 rounded-full bg-rose-50 px-3 py-1 text-xs font-medium text-rose-600">
               <Flower2 className="h-3.5 w-3.5" />
-              {eventData.themeTag || "Joyful celebration"}
+              {t(eventData.themeTag)}
             </span>
           </div>
         </div>
@@ -205,7 +247,7 @@ END:VCALENDAR`;
         <div className="space-y-6 ">
           <div className="flex justify-between  items-center">
             <h3 className="text-xl font-semibold text-gray-800">
-              Add to Calendar
+              {t(translations.events.addToCalendar)}
             </h3>
             <motion.button
               whileHover={{ scale: 1.1 }}
@@ -253,7 +295,7 @@ const EventCards = ({ events }) => {
   return (
     <div className="space-y-4">
       {events.map((event, index) => (
-        <SingleEventCard key={index} eventData={event} />
+        <SingleEventCard key={event.slug ?? index} eventData={event} />
       ))}
     </div>
   );

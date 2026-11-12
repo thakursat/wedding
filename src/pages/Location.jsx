@@ -1,38 +1,30 @@
 import config from "@/config/config";
+import translations from "@/config/translations";
+import { useLanguage } from "@/lib/language";
 import { CalendarCheck, ExternalLink, MapPin } from "lucide-react";
 import { motion } from "framer-motion";
 
-const buildVenueList = () => {
+const buildVenueList = (t) => {
   const agenda = Array.isArray(config.data.agenda) ? config.data.agenda : [];
-  const primaryEvents = agenda.filter((event) => event?.slug !== "reception");
-  const receptionEvent = agenda.find((event) => event?.slug === "reception");
+  // Events list a location only when it is held at the venue below.
+  const hostedEvents = agenda.filter((event) => event?.location);
 
   return [
     {
-      id: "jaipur-bagh",
-      title: config.data.location,
-      address: config.data.address,
+      id: "green-field-lawn",
+      title: t(config.data.location),
+      address: t(config.data.address),
       embed: config.data.maps_embed,
       mapsUrl: config.data.maps_url,
-      hostedEvents: primaryEvents,
-      summary:
-        "All pre-wedding rituals and the wedding ceremony will be celebrated amidst the courtyards of Jaipur Bagh.",
-    },
-    {
-      id: "moon-and-mars",
-      title: config.data.receptionLocation,
-      address: config.data.receptionAddress,
-      embed: config.data.reception_maps_embed,
-      mapsUrl: config.data.reception_maps_url,
-      hostedEvents: receptionEvent ? [receptionEvent] : [],
-      summary:
-        "Our reception gala moves to Moon and Mars, where toasts, dinner, and our first dance close the festivities.",
+      hostedEvents,
     },
   ].filter((venue) => venue.title && venue.mapsUrl);
 };
 
 export default function Location() {
-  const venues = buildVenueList();
+  const { t } = useLanguage();
+  const text = translations.location;
+  const venues = buildVenueList(t);
 
   return (
     <section id="location" className="relative min-h-screen overflow-hidden">
@@ -51,7 +43,7 @@ export default function Location() {
             viewport={{ once: true }}
             className="inline-block font-medium text-rose-500"
           >
-            Celebration Venues
+            {t(text.eyebrow)}
           </motion.span>
 
           <motion.h2
@@ -61,7 +53,7 @@ export default function Location() {
             viewport={{ once: true }}
             className="font-serif text-4xl text-gray-800 md:text-5xl"
           >
-            Two Destinations, One Story
+            {t(text.heading)}
           </motion.h2>
 
           <motion.div
@@ -102,7 +94,7 @@ export default function Location() {
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center bg-rose-50 text-sm text-rose-500">
-                    Map view coming soon
+                    {t(text.mapComingSoon)}
                   </div>
                 )}
               </motion.div>
@@ -121,11 +113,6 @@ export default function Location() {
                   <h3 className="text-2xl font-serif text-gray-800">
                     {venue.title}
                   </h3>
-                  {venue.summary && (
-                    <p className="mt-4 text-sm text-gray-600">
-                      {venue.summary}
-                    </p>
-                  )}
 
                   <div className="mt-6 space-y-4">
                     {venue.address && (
@@ -138,7 +125,7 @@ export default function Location() {
                     {venue.hostedEvents?.length > 0 && (
                       <div className="rounded-2xl border border-rose-100 bg-rose-50/60 p-4">
                         <p className="text-xs font-semibold uppercase tracking-[0.3rem] text-rose-400">
-                          Hosted celebrations
+                          {t(text.hostedEvents)}
                         </p>
                         <ul className="mt-3 space-y-2 text-sm text-gray-700">
                           {venue.hostedEvents.map((event) => (
@@ -147,7 +134,7 @@ export default function Location() {
                               className="flex items-start gap-2"
                             >
                               <CalendarCheck className="mt-0.5 h-4 w-4 flex-shrink-0 text-rose-500" />
-                              <span>{event.title}</span>
+                              <span>{t(event.title)}</span>
                             </li>
                           ))}
                         </ul>
@@ -165,7 +152,7 @@ export default function Location() {
                         className="flex w-full items-center justify-center gap-1.5 rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-gray-600 transition-colors hover:bg-gray-50"
                       >
                         <ExternalLink className="h-3.5 w-3.5" />
-                        Open in Google Maps
+                        {t(text.openInMaps)}
                       </motion.a>
                     </div>
                   </div>

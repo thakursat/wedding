@@ -3,11 +3,13 @@ import React, { useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Home, CalendarHeart, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
+import translations from "@/config/translations";
+import { useLanguage } from "@/lib/language";
 
 const menuItems = [
-  { icon: Home, label: "Home", href: "#home", id: "home" },
-  { icon: CalendarHeart, label: "Events", href: "#event", id: "event" },
-  { icon: MapPin, label: "Location", href: "#location", id: "location" },
+  { icon: Home, label: translations.nav.home, href: "#home", id: "home" },
+  { icon: CalendarHeart, label: translations.nav.events, href: "#event", id: "event" },
+  { icon: MapPin, label: translations.nav.location, href: "#location", id: "location" },
 ];
 
 /**
@@ -28,6 +30,7 @@ const menuItems = [
  */
 const BottomBar = () => {
   const [active, setActive] = React.useState("home");
+  const { t } = useLanguage();
 
   // Function to handle smooth scrolling when clicking menu items
   const handleMenuClick = useCallback((e, href, id) => {
@@ -98,7 +101,7 @@ const BottomBar = () => {
           <nav className="flex items-center gap-1">
             {menuItems.map((item) => (
               <motion.a
-                key={item.label}
+                key={item.id}
                 href={item.href}
                 className={cn(
                   "flex flex-col items-center justify-center py-2 px-2 rounded-xl transition-all duration-300 ease-in-out",
@@ -138,7 +141,7 @@ const BottomBar = () => {
                   }}
                   transition={{ duration: 0.2 }}
                 >
-                  {item.label}
+                  {t(item.label)}
                 </motion.span>
               </motion.a>
             ))}

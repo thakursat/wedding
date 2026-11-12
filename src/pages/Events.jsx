@@ -1,9 +1,14 @@
 import EventCards from "@/components/EventsCard";
 import config from "@/config/config";
+import translations from "@/config/translations";
+import { useLanguage } from "@/lib/language";
 import { motion } from "framer-motion";
-import { Heart, Music4, Flower2 } from "lucide-react";
+import { Heart } from "lucide-react";
 
 export default function Events() {
+  const { t } = useLanguage();
+  const text = translations.events;
+
   return (
     <>
       {/* Event Section */}
@@ -33,7 +38,7 @@ export default function Events() {
               transition={{ delay: 0.2 }}
               className="inline-block text-rose-500 font-medium mb-2"
             >
-              Save These Important Dates
+              {t(translations.hero.saveDates)}
             </motion.span>
 
             <motion.h2
@@ -43,7 +48,7 @@ export default function Events() {
               transition={{ delay: 0.3 }}
               className="text-4xl md:text-5xl font-serif text-gray-800 leading-tight"
             >
-              Wedding Event Schedule
+              {t(text.heading)}
             </motion.h2>
 
             <motion.p
@@ -53,26 +58,8 @@ export default function Events() {
               transition={{ delay: 0.4 }}
               className="text-gray-600 max-w-md mx-auto"
             >
-              From haldi to our grand reception finale, each ritual is woven
-              with music, fragrance, and the blessings of our loved ones.
+              {t(text.intro)}
             </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.5 }}
-              className="mt-6 grid grid-cols-2 gap-3 text-xs text-rose-500 sm:text-sm"
-            >
-              <div className="flex items-center gap-2 justify-center rounded-full bg-white/70 px-4 py-2 shadow-sm">
-                <Flower2 className="w-4 h-4" />
-                Haldi rituals
-              </div>
-              <div className="flex items-center gap-2 justify-center rounded-full bg-white/70 px-4 py-2 shadow-sm">
-                <Music4 className="w-4 h-4" />
-                Sangeet dance-offs
-              </div>
-            </motion.div>
 
             {/* Decorative Line */}
             <motion.div

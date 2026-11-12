@@ -20,9 +20,12 @@ import { AnimatePresence } from "framer-motion";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import Layout from "@/components/Layout";
+import LanguageChooser from "@/components/LanguageChooser";
+import LanguageToggle from "@/components/LanguageToggle";
 import MainContent from "@/pages/MainContent";
 import LandingPage from "@/pages/LandingPage";
 import config from "@/config/config";
+import { useLanguage } from "@/lib/language";
 
 /**
  * App component serves as the root of the application.
@@ -44,29 +47,30 @@ import config from "@/config/config";
  */
 function App() {
   const [isInvitationOpen, setIsInvitationOpen] = useState(false);
+  const [hasChosenLanguage, setHasChosenLanguage] = useState(false);
   const location = useLocation();
+  const { t } = useLanguage();
+  const title = t(config.data.title);
+  const description = t(config.data.description);
 
   return (
     <HelmetProvider>
       <Helmet>
         {/* Primary Meta Tags */}
-        <title>{config.data.title}</title>
-        <meta name="title" content={config.data.title} />
-        <meta name="description" content={config.data.description} />
+        <title>{title}</title>
+        <meta name="title" content={title} />
+        <meta name="description" content={description} />
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content={window.location.href} />
-        <meta property="og:title" content={config.data.title} />
-        <meta property="og:description" content={config.data.description} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
         <meta property="og:image" content={config.data.ogImage} />
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content={window.location.href} />
-        <meta property="twitter:title" content={config.data.title} />
-        <meta
-          property="twitter:description"
-          content={config.data.description}
-        />
+        <meta property="twitter:title" content={title} />
+        <meta property="twitter:description" content={description} />
         <meta property="twitter:image" content={config.data.ogImage} />
         {/* Favicon */}
         <link rel="icon" type="image/x-icon" href={config.data.favicon} />
@@ -74,6 +78,13 @@ function App() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="theme-color" content="#FDA4AF" /> {/* Rose-300 color */}
       </Helmet>
+
+      <AnimatePresence>
+        {!hasChosenLanguage && (
+          <LanguageChooser onChoose={() => setHasChosenLanguage(true)} />
+        )}
+      </AnimatePresence>
+      {hasChosenLanguage && <LanguageToggle />}
 
       <AnimatePresence mode="wait">
         {!isInvitationOpen ? (

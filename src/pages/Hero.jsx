@@ -1,18 +1,13 @@
-import { Calendar, Clock, Heart, Sparkles, Flower2 } from "lucide-react";
+import { Calendar, Heart, Sparkles, Flower2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
 import Confetti from "react-confetti";
 import config from "@/config/config";
+import translations from "@/config/translations";
 import { formatEventDate } from "@/lib/formatEventDate";
+import { useLanguage } from "@/lib/language";
 import { safeBase64 } from "@/lib/base64";
 import { useWindowSize } from "@/lib/useWindowSize";
-
-const celebrationBadges = [
-  "Mehndi & Haldi",
-  "Sangeet & Dhol",
-  "Sacred Pheras",
-  "Reception Gala",
-];
 
 const sanitizeTimeValue = (timeValue) => {
   if (!timeValue) {
@@ -90,7 +85,7 @@ const getNextDateTime = (dateString, timeString) => {
   return Number.isNaN(nextYearDate.getTime()) ? null : nextYearDate;
 };
 
-const determineCountdownTarget = () => {
+const determineCountdownTarget = (label, language) => {
   const weddingDateTime = getNextDateTime(config.data.date, config.data.time);
   if (!weddingDateTime) {
     return null;
@@ -99,8 +94,8 @@ const determineCountdownTarget = () => {
   const isoString = weddingDateTime.toISOString();
   return {
     iso: isoString,
-    label: "Wedding Ceremony",
-    formattedDate: formatEventDate(isoString, "full"),
+    label,
+    formattedDate: formatEventDate(isoString, "full", language),
   };
 };
 
@@ -152,6 +147,8 @@ const FloatingPetals = () => {
 };
 
 const CountdownTimer = ({ targetDate, targetLabel, formattedDate }) => {
+  const { t } = useLanguage();
+  const text = translations.hero;
   const [timeLeft, setTimeLeft] = useState(() => calculateTimeLeft(targetDate));
 
   function calculateTimeLeft(dateValue) {
@@ -194,11 +191,9 @@ const CountdownTimer = ({ targetDate, targetLabel, formattedDate }) => {
     return (
       <div className="mt-8 rounded-2xl border border-rose-100 bg-white/80 px-6 py-5 text-center shadow-lg">
         <p className="text-base font-semibold text-rose-600">
-          The celebrations are underway!
+          {t(text.underway)}
         </p>
-        <p className="mt-1 text-sm text-gray-600">
-          We are welcoming guests in real time and soaking in every blessing.
-        </p>
+        <p className="mt-1 text-sm text-gray-600">{t(text.underwayDetail)}</p>
       </div>
     );
   }
@@ -209,7 +204,7 @@ const CountdownTimer = ({ targetDate, targetLabel, formattedDate }) => {
         <div className="text-center">
           {targetLabel && (
             <p className="text-sm font-medium text-rose-600">
-              Counting down to {targetLabel}
+              {t(text.countingDownTo)} {targetLabel}
             </p>
           )}
           {formattedDate && (
@@ -228,7 +223,9 @@ const CountdownTimer = ({ targetDate, targetLabel, formattedDate }) => {
             <span className="text-xl font-bold text-rose-600 sm:text-2xl">
               {value}
             </span>
-            <span className="text-xs capitalize text-gray-500">{interval}</span>
+            <span className="text-xs capitalize text-gray-500">
+              {t(text.units[interval])}
+            </span>
           </motion.div>
         ))}
       </div>
@@ -240,7 +237,16 @@ export default function Hero() {
   const [guestName, setGuestName] = useState("");
   const [showCelebrationConfetti, setShowCelebrationConfetti] = useState(true);
   const { width, height } = useWindowSize();
-  const countdownTarget = determineCountdownTarget();
+  const { language, t } = useLanguage();
+  const text = translations.hero;
+  const agenda = config.data.agenda;
+  const weddingEvent = agenda.find((event) => event.slug === "wedding");
+  const countdownTarget = determineCountdownTarget(
+    t(weddingEvent?.title),
+    language
+  );
+  const coupleNames = `${t(config.data.groomName)} & ${t(config.data.brideName)}`;
+  const weddingDate = formatEventDate(config.data.date, "dayMonthYear", language);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -296,7 +302,7 @@ export default function Hero() {
           >
             <motion.img
               src="/images/couple.jpeg"
-              alt={`${config.data.brideName} and ${config.data.groomName}`}
+              alt={coupleNames}
               className="h-full w-full object-cover"
               initial={{ scale: 1.08, opacity: 0.95 }}
               animate={{ scale: [1.08, 1, 1.08], opacity: 1 }}
@@ -316,7 +322,7 @@ export default function Hero() {
                 transition={{ delay: 0.5, duration: 0.6 }}
                 className="text-xs uppercase tracking-[0.45em] text-white/80 sm:text-sm"
               >
-                Our Story Begins
+                {t(text.storyBegins)}
               </motion.span>
               <motion.h1
                 initial={{ opacity: 0, y: 18 }}
@@ -324,7 +330,7 @@ export default function Hero() {
                 transition={{ delay: 0.7, duration: 0.7 }}
                 className="text-3xl font-serif sm:text-[2.85rem]"
               >
-                {config.data.brideName} &amp; {config.data.groomName}
+                {coupleNames}
               </motion.h1>
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
@@ -332,8 +338,7 @@ export default function Hero() {
                 transition={{ delay: 0.9, duration: 0.7 }}
                 className="text-sm font-light text-white/80 sm:text-base"
               >
-                {formatEventDate(config.data.date, "dayMonthYear")} at{" "}
-                {config.data.time}
+                {weddingDate}
               </motion.p>
             </div>
             <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-white via-white/40 to-transparent" />
@@ -347,28 +352,33 @@ export default function Hero() {
           className="inline-block mx-auto"
         >
           <span className="px-4 py-1 text-sm text-rose-600 rounded-full border border-rose-200 bg-rose-50">
-            Save These Important Dates
+            {t(text.saveDates)}
           </span>
         </motion.div>
 
         <div className="space-y-4">
-          <motion.p
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
-            className="text-base italic font-light text-gray-500 sm:text-lg"
+            className="space-y-2"
           >
-            God willing, we unite in a celebration of love, tradition, and joy.
-          </motion.p>
+            <p className="text-sm font-semibold text-amber-600">
+              {t(config.data.invocation)}
+            </p>
+            <p className="mx-auto max-w-sm text-base italic font-light text-gray-500 sm:text-lg">
+              {t(config.data.blessing)}
+            </p>
+          </motion.div>
 
           <div className="flex flex-wrap items-center justify-center gap-2 pt-5">
-            {celebrationBadges.map((badge) => (
+            {agenda.map((event) => (
               <span
-                key={badge}
+                key={event.slug}
                 className="inline-flex items-center gap-2 px-3 py-1 text-xs font-medium text-rose-600 rounded-full shadow-sm bg-white/80"
               >
                 <Sparkles className="w-3.5 h-3.5" />
-                {badge}
+                {t(event.title)}
               </span>
             ))}
           </div>
@@ -399,16 +409,7 @@ export default function Hero() {
                     <span className="flex h-8 w-8 items-center justify-center rounded-full bg-rose-50 text-rose-500 shadow-sm">
                       <Calendar className="h-4 w-4" />
                     </span>
-                    <span>
-                      {formatEventDate(config.data.date, "dayMonthYear")}
-                    </span>
-                  </span>
-                  <span className="hidden h-4 w-px bg-rose-100 sm:block" />
-                  <span className="inline-flex items-center gap-2 text-sm font-medium text-gray-700 sm:text-base">
-                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-rose-50 text-rose-500 shadow-sm">
-                      <Clock className="h-4 w-4" />
-                    </span>
-                    <span>{config.data.time}</span>
+                    <span>{weddingDate}</span>
                   </span>
                 </div>
               </motion.div>
@@ -426,14 +427,12 @@ export default function Hero() {
                 className="space-y-2"
               >
                 <p className="text-sm italic font-serif text-gray-500">
-                  To our cherished guest
+                  {t(text.dearGuest)}
                 </p>
                 <p className="text-lg font-semibold text-rose-500">
-                  {guestName ? guestName : "Honoured Guest"}
+                  {guestName ? guestName : t(text.honouredGuest)}
                 </p>
-                <p className="text-sm text-gray-600">
-                  Your presence blesses this celebration
-                </p>
+                <p className="text-sm text-gray-600">{t(text.presence)}</p>
               </motion.div>
             </div>
 

@@ -21,6 +21,7 @@ export default {
 			fontFamily: {
 				serif: [
 					'Playfair Display',
+					'Tiro Devanagari Hindi',
 					'serif'
 				]
 			},

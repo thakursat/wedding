@@ -9,6 +9,11 @@
   overflow: hidden;
 }
 
+/* Wide letter-spacing splits Devanagari conjuncts and matras apart. */
+html:lang(hi) [class*="tracking-"] {
+  letter-spacing: normal;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
